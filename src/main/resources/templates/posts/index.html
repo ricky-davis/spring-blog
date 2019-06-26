@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+    <head th:replace="partials :: header(title='All Posts')"/>
+    <body>
+        <nav th:replace="partials :: navbar"/>
+
+
+        <div class="card" th:each="post : ${postsList}">
+            <div class="card-header" th:text="${post.title}" />
+            <div class="card-body">
+                <p th:text="${post.body}" />
+            </div>
+        </div>
+
+
+
+        <div th:replace="partials :: footer"/>
+    </body>
+</html>
