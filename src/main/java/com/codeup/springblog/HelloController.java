@@ -7,8 +7,13 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class HelloController {
 
+    @GetMapping(path={"/hello","/hi"})
+    @ResponseBody
+    public String hello(){
+        return "hello";
+    }
 
-    @GetMapping(path={"/hello","/hello/{name}"})
+    @GetMapping("/hello/{name}")
     public String sayHello(@PathVariable String name, Model model) {
         model.addAttribute("name", name);
         model.addAttribute("test", "<em>Hello</em>");

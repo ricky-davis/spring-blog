@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:fragment="header">
+        <meta charset="UTF-8"/>
+        <title th:text="${title}"></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    </head>
+    <body>
+        <nav th:fragment="navbar" style="background-color:#777">
+            <a href="/hello">Hello</a>
+            <a href="/roll-dice">Roll Dice!</a>
+        </nav>
+        <div th:fragment="footer" style="position:absolute;bottom:0">
+            (c) Ricky Davis
+        </div>
+    </body>
+</html>

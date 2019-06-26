@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <title>Roll Dice</title>
-</head>
+<head th:replace="partials :: header(title='Roll Dice')"/>
 <body>
+<nav th:replace="partials :: navbar"/>
 <div >
     <a href="/roll-dice/1">1</a>
     <a href="/roll-dice/2">2</a>
@@ -21,5 +19,6 @@
 </div>
 
 
+<div th:replace="partials :: footer"/>
 </body>
 </html>
