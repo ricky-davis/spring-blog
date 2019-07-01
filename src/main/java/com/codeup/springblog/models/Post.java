@@ -1,31 +1,35 @@
-package com.codeup.springblog;
+package com.codeup.springblog.models;
 
 import javax.persistence.*;
 
-
 @Entity
-@Table(name="posts")
+@Table(name = "posts")
 public class Post {
 
-    @Id @GeneratedValue
-    @Column(columnDefinition = "int(11) unsigned not null auto_increment")
+    @Id
+    @GeneratedValue
     private long id;
 
     @Column(nullable = false, length = 255)
     private String title;
 
-    @Column(columnDefinition = "text not null")
+    @Column(nullable = false, length = 1000)
     private String body;
+
+    @ManyToOne
+    @JoinColumn (name = "owner_id")
+    private User owner;
 
     public Post() {
     }
 
-    public Post(long id,String title, String body) {
-        this.id = id;
+    public Post(String title, String body) {
         this.title = title;
         this.body = body;
     }
-    public Post(String title, String body) {
+
+    public Post(long id, String title, String body) {
+        this.id = id;
         this.title = title;
         this.body = body;
     }
@@ -52,5 +56,13 @@ public class Post {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 }

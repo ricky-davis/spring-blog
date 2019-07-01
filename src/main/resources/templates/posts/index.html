@@ -1,19 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="partials :: header(title='All Posts')"/>
-    <body>
-        <nav th:replace="partials :: navbar"/>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partials/head :: head('View Posts')">
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+</head>
+<body>
 
-        <div class="card" th:each="post : ${postsList}">
-            <div class="card-header" th:text="${post.title}" />
-            <div class="card-body">
-                <p th:text="${post.body}" />
+    <nav th:replace="partials/navbar :: nav"></nav>
+
+    <header th:replace="partials/header :: header('All Posts!')"></header>
+
+    <main class="container">
+        <th:block th:each="post : ${posts}">
+            <div class="card p-1">
+                <!--/* Thymeleaf has several built-in string utility functions like capitalizeWords */-->
+                <h3 th:text="${#strings.capitalizeWords(post.title)}">Post</h3>
+                <p th:text="${post.body}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus accusantium alias aliquid architecto eligendi, excepturi explicabo libero maiores non numquam quae recusandae, sapiente suscipit, unde vero voluptatibus! Officiis, temporibus.</p>
+                <a th:href="@{'/posts/'+${post.id}+'/edit'}">Edit</a>
             </div>
-        </div>
+        </th:block>
+    </main>
 
+    <th:block th:include="partials/scripts :: scripts" />
 
-
-        <div th:replace="partials :: footer"/>
-    </body>
+</body>
 </html>

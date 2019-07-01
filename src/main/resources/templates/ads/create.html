@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="partials/header :: header('Create Ad')"></head>
+<body>
+
+<div th:replace="partials/navbar :: nav"></div>
+
+<main class="container">
+
+    <h1>Create Ad</h1>
+
+    <form action="/ads/create" method="post">
+        Title:
+        <input name="title" />
+        <br />
+        Description:
+        <input name="description" />
+        <br />
+        Price In Cents:
+        <input type="number" name="priceInCents" />
+        <br />
+        <input type="submit" />
+    </form>
+
+
+</main>
+
+
+</body>
+</html>
