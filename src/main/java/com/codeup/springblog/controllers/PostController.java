@@ -12,8 +12,10 @@ public class PostController {
 
     private PostRepository postDao;
     private UserRepository userDao;
+    private final EmailService emailService;
 
-    public PostController(PostRepository postDao, UserRepository userDao) {
+    public PostController(PostRepository postDao, UserRepository userDao, EmailService emailService) {
+        this.emailService = emailService;
         this.postDao = postDao;
         this.userDao = userDao;
     }
@@ -42,6 +44,7 @@ public class PostController {
     public String insert(@ModelAttribute Post post) {
         post.setOwner(userDao.findOne(1L));
         postDao.save(post);
+        emailService.prepareAndSend(post);
         return "redirect:/posts";
     }
 
