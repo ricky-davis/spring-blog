@@ -10,14 +10,14 @@
 <header th:replace="partials/header :: header('Create Post')"></header>
 
 <main class="container">
-    <form th:action="@{'/posts/create'}" th:method="POST">
+    <form th:action="@{/posts/create}" th:method="post" th:object="${post}">
         <div class="form-group">
             <label for="title">Title</label>
-            <input class="form-control" id="title" type="text" name="title" />
+            <input class="form-control" id="title" type="text" th:field="${post.title}" />
         </div>
         <div class="form-group">
             <label for="body">Body</label>
-            <textarea class="form-control" name="body" id="body" cols="30" rows="10"></textarea>
+            <textarea class="form-control" th:field="*{body}" id="body" cols="30" rows="10"></textarea>
         </div>
         <button class="btn btn-block btn-primary">Submit</button>
     </form>

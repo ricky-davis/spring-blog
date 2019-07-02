@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="partials/head :: head('Edit Post')">
+<head th:replace="partials/head :: head(${title})">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
 </head>
 <body>
 
 <nav th:replace="partials/navbar :: nav"></nav>
 
-<header th:replace="partials/header :: header('Edit Post')"></header>
+<header th:replace="partials/header :: header(${title})"></header>
 
 <main class="container">
-    <form th:action="@{'/posts/' + ${post.id} + '/edit'}" th:method="POST">
+    <form th:action="${action}" th:method="post" th:object="${post}">
         <div class="form-group">
             <label for="title">Title</label>
-            <input class="form-control" id="title" type="text" th:value="${post.title}" name="title" />
+            <input class="form-control" id="title" type="text" th:value="${post.title}" th:field="${post.title}" />
         </div>
         <div class="form-group">
             <label for="body">Body</label>
-            <textarea class="form-control" name="body" id="body" cols="30" rows="10" th:text="${post.body}"></textarea>
+            <textarea class="form-control" th:field="${post.body}" id="body" cols="30" rows="10" th:text="${post.body}"></textarea>
         </div>
         <button class="btn btn-block btn-primary">Submit</button>
     </form>
-    <form th:action="@{'/posts/' + ${post.id} + '/delete'}" th:method="POST">
+    <form th:if="${post.title != null}" th:action="@{'/posts/' + ${post.id} + '/delete'}" th:method="POST">
         <button class="btn btn-danger">Delete</button>
     </form>
 </main>
