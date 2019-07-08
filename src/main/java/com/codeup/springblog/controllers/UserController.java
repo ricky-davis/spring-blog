@@ -27,11 +27,16 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
         this.hibp = hibp;
     }
+    @GetMapping("/profile")
+    public String showProfile(Model model){
+        model.addAttribute("user",userDao.findOne(((User)authSvc.getCurUser()).getId()));
+        return "users/profile";
+    }
 
     @GetMapping("/sign-up")
     public String showSignupForm(Model model){
         model.addAttribute("user", new User());
-        if(authSvc.getCurUser() == null){
+        if(authSvc.getCurUser() != null){
             return "redirect:/posts";
         }
         return "users/sign-up";
@@ -41,7 +46,7 @@ public class UserController {
     public String saveUser(@Valid User user,
                            Errors validation,
                            Model model){
-        if(authSvc.getCurUser() == null){
+        if(authSvc.getCurUser() != null){
             return "redirect:/posts";
         }
         if(userDao.findByEmail(user.getEmail()) != null){
@@ -49,6 +54,10 @@ public class UserController {
         }
         if(userDao.findByUsername(user.getUsername()) != null){
             validation.rejectValue("username",null,"This username already exists!");
+        }
+        if(!user.getCnfmpassword().equals(user.getPassword())){
+            validation.rejectValue("password",null,
+                    "The passwords must match!");
         }
         if(hibp.CheckPasswordForPwnage(user.getPassword())){
             validation.rejectValue("password",null,

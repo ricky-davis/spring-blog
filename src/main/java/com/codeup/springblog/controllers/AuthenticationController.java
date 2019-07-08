@@ -16,7 +16,7 @@ public class AuthenticationController {
 
     @GetMapping("/login")
     public String showLoginForm() {
-        if(authSvc.getCurUser() == null){
+        if(authSvc.getCurUser() != null){
             return "redirect:/posts";
         }
         return "users/login";

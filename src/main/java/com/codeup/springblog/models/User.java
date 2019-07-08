@@ -33,6 +33,11 @@ public class User {
     @JsonIgnore
     private String password;
 
+    @NotBlank(message = "You must confirm your password!")
+    @JsonIgnore
+    @Transient
+    private String cnfmpassword;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     @JsonBackReference
     private List<Post> postList;
@@ -44,6 +49,7 @@ public class User {
         email = copy.email;
         username = copy.username;
         password = copy.password;
+        cnfmpassword = copy.cnfmpassword;
     }
 
     public User(String email, String username, String password) {
@@ -84,5 +90,12 @@ public class User {
         this.password = password;
     }
 
+    public String getCnfmpassword() {
+        return cnfmpassword;
+    }
+
+    public void setCnfmpassword(String cnfmpassword) {
+        this.cnfmpassword = cnfmpassword;
+    }
 
 }

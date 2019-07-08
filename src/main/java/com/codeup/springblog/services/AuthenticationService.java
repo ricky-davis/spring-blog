@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service("authenticationService")
 public class AuthenticationService {
     public Object getCurUser() {
-        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() != "anonymousUser") {
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() == "anonymousUser") {
             return null;
         }
         return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
