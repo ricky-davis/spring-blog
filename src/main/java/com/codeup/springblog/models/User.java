@@ -1,6 +1,12 @@
 package com.codeup.springblog.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -12,18 +18,32 @@ public class User {
     private long id;
 
     @Column(nullable = false, unique = true, length = 255)
+    @NotBlank(message = "You must have an email!")
+    @Email(message="[${validatedValue}] is not a valid email")
     private String email;
 
     @Column(nullable = false, unique = true, length = 255)
+    @NotBlank(message = "You must have a username!")
+    @Size(min = 3, message = "A username must be at least 3 characters.")
     private String username;
 
     @Column(nullable = false, length = 255)
+    @NotBlank(message = "You must have a password!")
+    @Size(min = 8, message = "A password must be at least 8 characters.")
+    @JsonIgnore
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+    @JsonBackReference
     private List<Post> postList;
 
     public User() {
+    }
+    public User(User copy) {
+        id = copy.id; // This line is SUPER important! Many things won't work if it's absent
+        email = copy.email;
+        username = copy.username;
+        password = copy.password;
     }
 
     public User(String email, String username, String password) {
@@ -63,4 +83,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
 }

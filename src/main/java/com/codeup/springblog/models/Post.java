@@ -1,5 +1,8 @@
 package com.codeup.springblog.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -18,6 +21,8 @@ public class Post {
 
     @ManyToOne
     @JoinColumn (name = "owner_id")
+    @JsonManagedReference
+    @JsonIgnoreProperties("email")
     private User owner;
 
     public Post() {

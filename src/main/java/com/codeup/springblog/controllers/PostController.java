@@ -3,9 +3,12 @@ package com.codeup.springblog.controllers;
 import com.codeup.springblog.models.Post;
 import com.codeup.springblog.repos.PostRepository;
 import com.codeup.springblog.repos.UserRepository;
+import com.codeup.springblog.services.EmailService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class PostController {
@@ -50,7 +53,6 @@ public class PostController {
 
     @GetMapping("/posts/{id}/edit")
     public String edit(@PathVariable long id, Model model) {
-        Post post = postDao.findOne(id);
         model.addAttribute("post", postDao.findOne(id));
         model.addAttribute("action", "/posts/"+id+"/edit");
         model.addAttribute("title", "Edit Post");
@@ -70,5 +72,11 @@ public class PostController {
         return "redirect:/posts";
     }
 
+
+    @GetMapping("/posts.json")
+    @ResponseBody
+    public Iterable<Post> viewAllAdsInJSONFormat() {
+        return postDao.findAll();
+    }
 
 }
