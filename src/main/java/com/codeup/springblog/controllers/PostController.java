@@ -23,10 +23,14 @@ public class PostController {
         this.userDao = userDao;
     }
 
-    @GetMapping("/posts")
+    @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("posts", postDao.findAll());
         return "posts/index";
+    }
+    @GetMapping("/posts")
+    public String redirectToIndex() {
+        return "redirect:/";
     }
 
     @GetMapping("/posts/{id}")

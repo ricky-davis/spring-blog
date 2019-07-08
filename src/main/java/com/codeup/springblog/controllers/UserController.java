@@ -2,7 +2,9 @@ package com.codeup.springblog.controllers;
 
 import com.codeup.springblog.models.User;
 import com.codeup.springblog.repos.UserRepository;
+import com.codeup.springblog.services.AuthenticationService;
 import com.codeup.springblog.services.HaveIBeenPwndService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +19,10 @@ public class UserController {
     private UserRepository userDao;
     private PasswordEncoder passwordEncoder;
     private HaveIBeenPwndService hibp;
+    private AuthenticationService authSvc;
 
-    public UserController(UserRepository users, PasswordEncoder passwordEncoder, HaveIBeenPwndService hibp) {
+    public UserController(AuthenticationService authSvc,UserRepository users, PasswordEncoder passwordEncoder, HaveIBeenPwndService hibp) {
+        this.authSvc = authSvc;
         this.userDao = users;
         this.passwordEncoder = passwordEncoder;
         this.hibp = hibp;
@@ -27,6 +31,9 @@ public class UserController {
     @GetMapping("/sign-up")
     public String showSignupForm(Model model){
         model.addAttribute("user", new User());
+        if(authSvc.getCurUser() == null){
+            return "redirect:/posts";
+        }
         return "users/sign-up";
     }
 
@@ -34,7 +41,9 @@ public class UserController {
     public String saveUser(@Valid User user,
                            Errors validation,
                            Model model){
-
+        if(authSvc.getCurUser() == null){
+            return "redirect:/posts";
+        }
         if(userDao.findByEmail(user.getEmail()) != null){
             validation.rejectValue("email",null,"This email is already in use!");
         }
