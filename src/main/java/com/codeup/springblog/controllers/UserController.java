@@ -2,6 +2,7 @@ package com.codeup.springblog.controllers;
 
 import com.codeup.springblog.models.User;
 import com.codeup.springblog.repos.UserRepository;
+import com.codeup.springblog.services.HaveIBeenPwndService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +16,12 @@ import javax.validation.Valid;
 public class UserController {
     private UserRepository userDao;
     private PasswordEncoder passwordEncoder;
+    private HaveIBeenPwndService hibp;
 
-    public UserController(UserRepository users, PasswordEncoder passwordEncoder) {
+    public UserController(UserRepository users, PasswordEncoder passwordEncoder, HaveIBeenPwndService hibp) {
         this.userDao = users;
         this.passwordEncoder = passwordEncoder;
+        this.hibp = hibp;
     }
 
     @GetMapping("/sign-up")
@@ -37,6 +40,10 @@ public class UserController {
         }
         if(userDao.findByUsername(user.getUsername()) != null){
             validation.rejectValue("username",null,"This username already exists!");
+        }
+        if(hibp.CheckPasswordForPwnage(user.getPassword())){
+            validation.rejectValue("password",null,
+                    "This password has been compromised in the past!");
         }
         if (validation.hasErrors()) {
             model.addAttribute("errors", validation);
