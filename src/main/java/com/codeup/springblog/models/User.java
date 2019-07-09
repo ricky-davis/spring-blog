@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -33,6 +34,11 @@ public class User {
     @JsonIgnore
     private String password;
 
+    private boolean enabled;
+
+
+
+
     @NotBlank(message = "You must confirm your password!")
     @JsonIgnore
     @Transient
@@ -42,6 +48,17 @@ public class User {
     @JsonBackReference
     private List<Post> postList;
 
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
+    private Collection<Role> roles;
+
     public User() {
     }
     public User(User copy) {
@@ -50,12 +67,23 @@ public class User {
         username = copy.username;
         password = copy.password;
         cnfmpassword = copy.cnfmpassword;
+        enabled=copy.enabled;
+        roles = copy.roles;
+        postList = copy.postList;
     }
 
     public User(String email, String username, String password) {
         this.email = email;
         this.username = username;
         this.password = password;
+    }
+    public User(String email, String username, String password, boolean enabled, Collection<Role> roles,List<Post> postList) {
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
+        this.roles = roles;
+        this.postList = postList;
     }
 
     public long getId() {
@@ -98,4 +126,27 @@ public class User {
         this.cnfmpassword = cnfmpassword;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
+    }
+
+    public List<Post> getPostList() {
+        return postList;
+    }
+
+    public void setPostList(List<Post> postList) {
+        this.postList = postList;
+    }
 }

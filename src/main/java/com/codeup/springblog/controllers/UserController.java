@@ -1,6 +1,7 @@
 package com.codeup.springblog.controllers;
 
 import com.codeup.springblog.models.User;
+import com.codeup.springblog.repos.RoleRepository;
 import com.codeup.springblog.repos.UserRepository;
 import com.codeup.springblog.services.AuthenticationService;
 import com.codeup.springblog.services.HaveIBeenPwndService;
@@ -13,15 +14,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 
 @Controller
 public class UserController {
     private UserRepository userDao;
+    private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private HaveIBeenPwndService hibp;
     private AuthenticationService authSvc;
 
-    public UserController(AuthenticationService authSvc,UserRepository users, PasswordEncoder passwordEncoder, HaveIBeenPwndService hibp) {
+    public UserController(RoleRepository roleRepository, AuthenticationService authSvc,UserRepository users, PasswordEncoder passwordEncoder, HaveIBeenPwndService hibp) {
+        this.roleRepository = roleRepository;
         this.authSvc = authSvc;
         this.userDao = users;
         this.passwordEncoder = passwordEncoder;
@@ -70,6 +74,7 @@ public class UserController {
         }
         String hash = passwordEncoder.encode(user.getPassword());
         user.setPassword(hash);
+        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
         userDao.save(user);
         return "redirect:/login";
     }
